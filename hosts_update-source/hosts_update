@@ -3,6 +3,7 @@
 # https://bbs.archlinux.org/viewtopic.php?id=106367
 
 . /etc/rc.d/functions # for pretty colors
+USECOLOR="yes"
 
 if [ ! -f /etc/hosts.local ]; then
  echo "You need to create /etc/hosts.local containing the hosts you wish to keep!"
@@ -10,7 +11,7 @@ if [ ! -f /etc/hosts.local ]; then
 fi
 
 stat_busy "Getting hosts lists from winhelp2002.mvps.org"
-wget -c -O /tmp/hosts.txt http://winhelp2002.mvps.org/hosts.txt
+wget -c -O /tmp/hosts.txt http://winhelp2002.mvps.org/hosts.txt &>/dev/null
 stat_done
 
 stat_busy "Merging and writting /etc/hosts"
