@@ -1,0 +1,115 @@
+#!/bin/bash
+# Script by Wintervenom
+# https://bbs.archlinux.org/viewtopic.php?id=106367
+
+# select portions from /etc/rc.d/functions and /usr/bin/makepkg to make stuff pretty
+ALL_OFF="\e[1;0m"
+BOLD="\e[1;1m"
+BLUE="${BOLD}\e[1;34m"
+GREEN="${BOLD}\e[1;32m"
+RED="${BOLD}\e[1;31m"
+YELLOW="${BOLD}\e[1;33m"
+
+# width:
+calc_columns () {
+	STAT_COL=80
+	if [[ ! -t 1 ]]; then
+		USECOLOR=""
+	elif [[ -t 0 ]]; then
+		# stty will fail when stdin isn't a terminal
+		STAT_COL=$(stty size)
+		# stty gives "rows cols"; strip the rows number, we just want columns
+		STAT_COL=${STAT_COL##* }
+	elif tput cols &>/dev/null; then
+		# is /usr/share/terminfo already mounted, and TERM recognized?
+		STAT_COL=$(tput cols)
+	fi
+	if (( STAT_COL == 0 )); then
+		# if output was 0 (serial console), set default width to 80
+		STAT_COL=80
+		USECOLOR=""
+	fi
+
+	# we use 13 characters for our own stuff
+	STAT_COL=$(( STAT_COL - 13 ))
+
+	if [[ -t 1 ]]; then
+		SAVE_POSITION="\e[s"
+		RESTORE_POSITION="\e[u"
+		DEL_TEXT="\e[$(( STAT_COL + 4 ))G"
+	else
+		SAVE_POSITION=""
+		RESTORE_POSITION=""
+		DEL_TEXT=""
+	fi
+}
+
+calc_columns
+
+# functions:
+deltext() {
+	printf "${DEL_TEXT}"
+}
+
+stat_busy() {
+	printf "${C_OTHER}${PREFIX_REG} ${C_MAIN}${1}${C_CLEAR} "
+	printf "${SAVE_POSITION}"
+	deltext
+	printf "   ${C_OTHER}[${C_BUSY}BUSY${C_OTHER}]${C_CLEAR} "
+}
+
+stat_done() {
+	deltext
+	printf "   ${C_OTHER}[${C_DONE}DONE${C_OTHER}]${C_CLEAR} \n"
+}
+
+# set colors
+if tput setaf 0 &>/dev/null; then
+	C_CLEAR=$(tput sgr0)                      # clear text
+	C_MAIN=${C_CLEAR}$(tput bold)        # main text
+	C_OTHER=${C_MAIN}$(tput setaf 4)     # prefix & brackets
+	C_SEPARATOR=${C_MAIN}$(tput setaf 0) # separator
+	C_BUSY=${C_CLEAR}$(tput setaf 6)     # busy
+	C_FAIL=${C_MAIN}$(tput setaf 1)      # failed
+	C_DONE=${C_MAIN}                          # completed
+	C_BKGD=${C_MAIN}$(tput setaf 5)      # backgrounded
+	C_H1=${C_MAIN}                            # highlight text 1
+	C_H2=${C_MAIN}$(tput setaf 6)        # highlight text 2
+else
+	C_CLEAR="\e[m"          # clear text
+	C_MAIN="\e[;1m"         # main text
+	C_OTHER="\e[1;34m"      # prefix & brackets
+	C_SEPARATOR="\e[1;30m"  # separator
+	C_BUSY="\e[;36m"        # busy
+	C_FAIL="\e[1;31m"       # failed
+	C_DONE=${C_MAIN}        # completed
+	C_BKGD="\e[1;35m"       # backgrounded
+	C_H1=${C_MAIN}          # highlight text 1
+	C_H2="\e[1;36m"         # highlight text 2
+fi
+
+# prefixes:
+PREFIX_REG="::"
+PREFIX_HL=" >"
+
+if [ ! -f /etc/hosts.local ]; then
+	echo "You need to create /etc/hosts.local containing the hosts you wish to keep!"
+	exit 0
+fi
+
+stat_busy "Getting bad actors list from winhelp2002.mvps.org"
+wget -c -O /tmp/hosts.txt http://winhelp2002.mvps.org/hosts.txt &>/dev/null
+stat_done
+
+stat_busy "Merging and writting /etc/hosts"
+# Replace every IP address with 0.0.0.0.
+sed -r -e 's:^([0-9]{1,3}\.){3}[0-9]{1,3}:0.0.0.0:' /tmp/hosts.txt > /tmp/hosts.new.txt
+tail -n+`grep -nF 'Start of entries' /tmp/hosts.new.txt | cut -d':' -f1` /tmp/hosts.new.txt > /tmp/hosts.txt
+
+# Write this new list over the system hosts list.  MVPS' line feeds
+# are \n\r; we will be getting rid of those dirty carriage returns.
+# We'll first write the user's hosts head, then the black list.
+cat /etc/hosts.local > /etc/hosts
+cat /tmp/hosts.txt | tr -d "\r" >> /etc/hosts
+rm /tmp/hosts*.txt
+stat_done
