@@ -5,7 +5,7 @@ Updates /etc/hosts with the mvps blocklist to prevent thousands of parasites, hi
 
 2. Run the script as root which will append /etc/hosts.local to the mvps blocklist and apply some post processing writing the final file to /etc/hosts automatically.
 
-3.(Optional) Add a cronjob under root crontab at some interval to keep your /etc/hosts fresh.
+3. (Optional) Add a cronjob under root crontab at some interval to keep your /etc/hosts fresh.
 
 ## Links
 AUR package: https://aur.archlinux.org/packages/hosts_update
