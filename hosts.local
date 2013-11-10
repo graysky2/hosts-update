@@ -1,7 +1,10 @@
-# Make certain you adjust the following two lines to match your HOSTNAME
+#
+# /etc/hosts: static lookup table for host names
+#
 
-127.0.0.1	localhost.localdomain	localhost	HOSTNAME
-::1		localhost.localdomain	localhost
+#<ip-address> <hostname.domain.org> <hostname>
+127.0.0.1 localhost.localdomain localhost
+::1   localhost.localdomain localhost
 
 # Example of other hosts you may wish to keep in the /etc/hosts
 
