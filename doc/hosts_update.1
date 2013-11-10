@@ -23,6 +23,18 @@ Add any hosts that you wish to keep i.e. other PCs on your network (optional).
 Run the script as root which will append /etc/hosts.local to the mvps blocklist and apply some post processing writing the final file to /etc/hosts automatically.
 .IP 4. 4
 Add a cronjob under root crontab at some interval to keep your /etc/hosts fresh (optional).
+.RE
+.PP
+
+.RS
+For example, in the root crontab, run the script every Sunday at pi time (3:14 AM):
+.PP
+.nf
+.fam C
+ 14 3 * * 0 /usr/bin/hosts_update &>/dev/null
+
+.fam T
+.fi
 .SH BUGS
 No known bugs.
 .SH AUTHOR

@@ -15,7 +15,7 @@ all:
 install-bin:
 	$(Q)echo -e '\033[1;32mInstalling main scripts...\033[0m'
 	install -Dm755 common/$(PN) "$(DESTDIR)$(BINDIR)/$(PN)"
-	install -Dm755 common/hosts.local "$(DESTDIR)/etc/hosts.local"
+	install -Dm644 common/hosts.local "$(DESTDIR)/etc/hosts.local"
 
 install-man:
 	$(Q)echo -e '\033[1;32mInstalling manpage...\033[0m'
