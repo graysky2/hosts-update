@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# /usr/bin/hosts_update version @VERSION@
+# /usr/bin/hosts-update version @VERSION@
 #
 # Originally by Wintervenom | https://bbs.archlinux.org/viewtopic.php?id=106367
 # Modified by graysky

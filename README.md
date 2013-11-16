@@ -1,4 +1,4 @@
-#Hosts_update
+#Hosts-update
 Updates /etc/hosts with the mvps blocklist to prevent thousands of parasites, hijackers and unwanted adware/spyware/privacy websites from working.
 
 1. Edit /etc/hosts.local to match the hostname of your system and adjust the domainname as needed.  Also add any hosts that you wish to keep i.e. other PCs on your network.
@@ -8,4 +8,4 @@ Updates /etc/hosts with the mvps blocklist to prevent thousands of parasites, hi
 3. (Optional) Add a cronjob under root crontab at some interval to keep your /etc/hosts fresh.
 
 ## Links
-AUR package: https://aur.archlinux.org/packages/hosts_update
+AUR package: https://aur.archlinux.org/packages/hosts-update
