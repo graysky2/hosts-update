@@ -2,7 +2,7 @@ DEPENDENCIES
  bash
  curl
 
-UILDING
+BUILDING
  Setup the via a make.
 
  $ make
