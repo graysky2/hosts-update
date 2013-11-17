@@ -1,4 +1,4 @@
-#Hosts-update
+#hosts-update
 Updates /etc/hosts with the mvps blocklist to prevent thousands of parasites, hijackers and unwanted adware/spyware/privacy websites from working.
 
 1. Edit /etc/hosts.local to match the hostname of your system and adjust the domainname as needed.  Also add any hosts that you wish to keep i.e. other PCs on your network.
