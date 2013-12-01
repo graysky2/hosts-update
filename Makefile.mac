@@ -1,0 +1,36 @@
+VERSION = 1.34
+PN = hosts-update
+
+PREFIX ?= /usr
+BINDIR = $(PREFIX)/bin
+DOCDIR = $(PREFIX)/share/doc/$(PN)-$(VERSION)
+MANDIR = $(PREFIX)/share/man/man1
+RM = rm
+Q = @
+
+all:
+	$(Q)echo 'Setting version'
+	$(Q)sed 's/@VERSION@/'$(VERSION)'/' common/$(PN).in > common/$(PN)
+
+install-bin:
+	$(Q)echo 'Installing main scripts...'
+	install -m755 common/$(PN) "$(DESTDIR)$(BINDIR)/$(PN)"
+	# symlink for compatibility due to name change
+	ln -s $(PN) "$(DESTDIR)$(BINDIR)/hosts_update"
+	install -m644 common/hosts.local "$(DESTDIR)/etc/hosts.local"
+
+install-man:
+	$(Q)echo 'Installing manpage...'
+	install -m644 doc/$(PN).1 "$(DESTDIR)$(MANDIR)/$(PN).1"
+	gzip -9 "$(DESTDIR)$(MANDIR)/$(PN).1"
+
+install: install-bin install-man
+
+uninstall:
+	$(Q)$(RM) "$(DESTDIR)$(BINDIR)/$(PN)"
+	$(Q)$(RM) "$(DESTDIR)$(BINDIR)/hosts_update"
+	$(Q)$(RM) "$(DESTDIR)$(MANDIR)/$(PN).1.gz"
+	$(Q)$(RM) "$(DESTDIR)/etc/hosts.local"
+
+clean:
+	$(Q)$(RM) "common/$(PN)"
