@@ -3,7 +3,10 @@ DEPENDENCIES
  curl
 
 BUILDING
- Setup the via a make.
+ NOTE: BSD/OSX users, use the Makefile.mac makefile, appending '--file=Makefile.mac'
+ to every make command.
+
+ Setup via make.
 
  $ make
 

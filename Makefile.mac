@@ -9,19 +9,19 @@ RM = rm
 Q = @
 
 all:
-	$(Q)echo -e '\033[1;32mSetting version\033[0m'
+	$(Q)echo 'Setting version'
 	$(Q)sed 's/@VERSION@/'$(VERSION)'/' common/$(PN).in > common/$(PN)
 
 install-bin:
-	$(Q)echo -e '\033[1;32mInstalling main scripts...\033[0m'
-	install -Dm755 common/$(PN) "$(DESTDIR)$(BINDIR)/$(PN)"
+	$(Q)echo 'Installing main scripts...'
+	install -m755 common/$(PN) "$(DESTDIR)$(BINDIR)/$(PN)"
 	# symlink for compatibility due to name change
 	ln -s $(PN) "$(DESTDIR)$(BINDIR)/hosts_update"
-	install -Dm644 common/hosts.local "$(DESTDIR)/etc/hosts.local"
+	install -m644 common/hosts.local "$(DESTDIR)/etc/hosts.local"
 
 install-man:
-	$(Q)echo -e '\033[1;32mInstalling manpage...\033[0m'
-	install -Dm644 doc/$(PN).1 "$(DESTDIR)$(MANDIR)/$(PN).1"
+	$(Q)echo 'Installing manpage...'
+	install -m644 doc/$(PN).1 "$(DESTDIR)$(MANDIR)/$(PN).1"
 	gzip -9 "$(DESTDIR)$(MANDIR)/$(PN).1"
 
 install: install-bin install-man

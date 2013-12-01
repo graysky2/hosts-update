@@ -7,12 +7,15 @@
 # Modified by Jonathan Poltak Samosir <jonathan.samosir@gmail.com> for use with vanilla OS X 10.9.
 
 # select portions from /etc/rc.d/functions and /usr/bin/makepkg to make stuff pretty
-ALL_OFF="\e[1;0m"
-BOLD="\e[1;1m"
-BLUE="${BOLD}\e[1;34m"
-GREEN="${BOLD}\e[1;32m"
-RED="${BOLD}\e[1;31m"
-YELLOW="${BOLD}\e[1;33m"
+# leave echo backslash escapes as unset on OS X, as vanilla OS X's echo does not support them
+if [[ "$(uname)" != "Darwin" ]]; then
+  ALL_OFF="\e[1;0m"
+  BOLD="\e[1;1m"
+  BLUE="${BOLD}\e[1;34m"
+  GREEN="${BOLD}\e[1;32m"
+  RED="${BOLD}\e[1;31m"
+  YELLOW="${BOLD}\e[1;33m"
+fi
 
 # width:
 calc_columns () {
@@ -131,7 +134,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 if [[ ! -f /etc/hosts.local ]]; then
-	echo -e ${BOLD}"/etc/hosts.local missing; reinstall this pacakge."${ALL_OFF}
+	echo -e ${BOLD}"/etc/hosts.local missing; reinstall this package."${ALL_OFF}
 	exit 1
 fi
 
