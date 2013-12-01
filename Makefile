@@ -28,5 +28,9 @@ install: install-bin install-man
 
 uninstall:
 	$(Q)$(RM) "$(DESTDIR)$(BINDIR)/$(PN)"
+	$(Q)$(RM) "$(DESTDIR)$(BINDIR)/hosts_update"
 	$(Q)$(RM) "$(DESTDIR)$(MANDIR)/$(PN).1.gz"
-	$(Q)$(RM) "$(DESTDIR)/etc//hosts.local"
+	$(Q)$(RM) "$(DESTDIR)/etc/hosts.local"
+
+clean:
+	$(Q)$(RM) "common/$(PN)"
