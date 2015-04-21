@@ -138,10 +138,25 @@ if [[ ! -f /etc/hosts.local ]]; then
 	exit 1
 fi
 
-stat_busy "Getting bad actors list from winhelp2002.mvps.org"
-curl -C - -s http://winhelp2002.mvps.org/hosts.txt > /tmp/hosts.txt
-[[ $? -gt 0 ]] && stat_die || stat_done
+echo > /tmp/hosts.txt
 
-stat_busy "Merging and writting /etc/hosts"
+hostslist=(
+    'http://www.malwaredomainlist.com/hostslist/hosts.txt'
+    'http://winhelp2002.mvps.org/hosts.txt'
+    'http://someonewhocares.org/hosts/zero/hosts'
+    'http://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&mimetype=plaintext&useip=0.0.0.0'
+    'http://hosts-file.net/.ad_servers.txt'
+    'https://adaway.org/hosts.txt'
+)
+
+for host in ${hostslist[*]}
+do
+    domain=$(echo ${host} | awk -F/ '{print $3}')
+    stat_busy "Getting bad actors list from ${domain}"
+    curl -C - -s $host >> /tmp/hosts.txt
+    [[ $? -gt 0 ]] && stat_die || stat_done
+done
+
+stat_busy "Merging and writing /etc/hosts"
 process
 [[ $? -gt 0 ]] && stat_die || stat_done
