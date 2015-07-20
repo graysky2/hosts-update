@@ -1,0 +1,10 @@
+[Unit]
+Description=MVPS hosts update
+
+[Timer]
+OnCalendar=weekly
+AccuracySec=12h
+Persistent=true
+
+[Install]
+WantedBy=timers.target

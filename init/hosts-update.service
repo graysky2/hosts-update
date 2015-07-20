@@ -1,0 +1,7 @@
+[Unit]
+Description=Update MVPS hosts
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/hosts-update
+After=network.target
