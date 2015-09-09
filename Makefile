@@ -1,4 +1,4 @@
-VERSION = 1.36
+VERSION = 1.37
 PN = hosts-update
 
 PREFIX ?= /usr
