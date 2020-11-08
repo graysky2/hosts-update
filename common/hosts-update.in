@@ -122,7 +122,7 @@ HOSTS_LOCAL="/etc/hosts.local"
 HOSTS_TMP="$(mktemp /tmp/$$.XXXXXXXX)"
 
 # Bad actors host list
-HOSTS_URL="http://winhelp2002.mvps.org/hosts.txt"
+HOSTS_URL="https://winhelp2002.mvps.org/hosts.txt"
 
 process() {
 	local hosts_zeros="$(mktemp /tmp/$$.XXXXXXXX)"
@@ -131,8 +131,6 @@ process() {
 	# Replace every IP address with 0.0.0.0.
 	sed -E 's:^([0-9]{1,3}\.){3}[0-9]{1,3}:0.0.0.0:' "$HOSTS_TMP" > "$hosts_zeros"
 
-	# TODO: fix this, maybe change to head. Currently gets the first n-x lines
-	# where x is the number of lines gotten from the sub-command.
 	tail -n+$(grep -nF 'Start of entries' "$hosts_zeros" | cut -d':' -f1) \
 	    "$hosts_zeros" > "$hosts_processed"
 
